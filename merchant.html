@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Quicks for Merchants</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- VIEW: MERCHANT AUTH -->
+<!-- ============================================================ -->
+<section id="view-auth" class="page">
+  <div class="wrap">
+    <div class="brand"><div class="brand-icon">⚡</div><div><div class="brand-name"><span class="deals">Deals</span><span class="hub">Hub</span></div><span class="brand-tag">QUICKS » Partners</span></div></div>
+    <h1 class="title-lg">Grow your store with Quicks</h1>
+    <p class="subtitle">List your shop, manage orders and reach nearby customers in minutes.</p>
+
+    <div class="tabbar">
+      <button class="active" data-tab="login">Login</button>
+      <button data-tab="signup">Create merchant account</button>
+    </div>
+
+    <!-- login -->
+    <form id="loginForm" style="margin-top:6px;">
+      <div class="field"><span class="field-icon">✉️</span><div class="field-body"><label>Email Address</label><input required type="email" name="email" placeholder="Enter your email"></div></div>
+      <div class="field"><span class="field-icon">🔒</span><div class="field-body"><label>Password</label><input required type="password" name="password" placeholder="Enter your password"></div></div>
+      <div class="field-error" id="loginError"></div>
+      <button class="btn btn-brand" type="submit" id="loginBtn">Login to Dashboard »</button>
+    </form>
+
+    <!-- signup -->
+    <form id="signupForm" class="hidden">
+      <div class="field"><span class="field-icon">🏪</span><div class="field-body"><label>Business Name</label><input required name="businessName" placeholder="e.g. Patel Provision Store"></div></div>
+      <div class="field"><span class="field-icon">🏷️</span><div class="field-body"><label>Business Type</label>
+        <select name="businessType">
+          <option>Grocery</option><option>Pharmacy</option><option>Electronics</option><option>Fashion</option><option>Other</option>
+        </select></div></div>
+      <div class="field"><span class="field-icon">✉️</span><div class="field-body"><label>Email Address</label><input required type="email" name="email" placeholder="Enter business email"></div></div>
+      <div class="field"><span class="field-icon">📞</span><div class="field-body"><label>Mobile Number</label><input required type="tel" name="phone" placeholder="Enter mobile number"></div></div>
+      <div class="field"><span class="field-icon">📍</span><div class="field-body"><label>Shop Address</label><input required name="address" placeholder="Street, area, city"></div></div>
+      <div class="field"><span class="field-icon">🔒</span><div class="field-body"><label>Password</label><input required type="password" minlength="6" name="password" placeholder="Create a strong password"></div></div>
+      <div class="field-error" id="signupError"></div>
+      <button class="btn btn-brand" type="submit" id="signupBtn">Create Merchant Account »</button>
+    </form>
+
+    <div class="divider">or continue with</div>
+    <div class="btn-row">
+      <button class="btn btn-outline" id="googleBtn">🔵 Continue with Google</button>
+      <button class="btn btn-outline" data-tab="phone">📱 Continue with Phone</button>
+    </div>
+
+    <!-- phone otp -->
+    <div id="phoneBlock" class="hidden" style="margin-top:16px;">
+      <form id="phoneForm">
+        <div class="field"><span class="field-icon">📞</span><div class="field-body"><label>Mobile Number</label><input required type="tel" id="phoneNumber" placeholder="+91 98765 43210"></div></div>
+        <div class="field-error" id="phoneError"></div>
+        <button class="btn btn-brand" type="submit" id="sendOtpBtn">Send OTP »</button>
+      </form>
+      <form id="otpForm" class="hidden" style="margin-top:6px;">
+        <div class="field"><span class="field-icon">🔑</span><div class="field-body"><label>Enter OTP</label><input required inputmode="numeric" id="otpCode" placeholder="6-digit code"></div></div>
+        <div class="field-error" id="otpError"></div>
+        <button class="btn btn-brand" type="submit" id="verifyOtpBtn">Verify &amp; Continue »</button>
+      </form>
+    </div>
+
+    <div class="notice"><span>🛡️</span><div><strong>Your business data is safe with us</strong>Payouts, orders and inventory stay private to your account.</div></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- VIEW: DASHBOARD -->
+<!-- ============================================================ -->
+<section id="view-dash" class="page hidden">
+  <div class="dash-shell">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-icon">⚡</div><div><div class="brand-name">DealsHub</div><span class="brand-tag">QUICKS »</span></div></div>
+      <nav>
+        <a href="#" class="active" data-panel="overview">📊 Overview</a>
+        <a href="#" data-panel="products">🛒 Products</a>
+        <a href="#" data-panel="orders">📦 Orders</a>
+        <a href="#" id="signOutBtn">⎋ Sign out</a>
+      </nav>
+    </aside>
+
+    <main class="dash-main">
+      <div class="dash-top">
+        <div><h2 id="dashBizName" style="font-size:22px; font-weight:800;">Your store</h2><p class="muted" id="dashBizType">—</p></div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card"><div class="lbl">Products listed</div><div class="val" id="statProducts">0</div></div>
+        <div class="stat-card"><div class="lbl">Orders received</div><div class="val" id="statOrders">0</div></div>
+        <div class="stat-card"><div class="lbl">Store status</div><div class="val" style="font-size:16px;"><span class="badge on">Live</span></div></div>
+      </div>
+
+      <section id="panel-products" class="panel">
+        <div class="card">
+          <div class="section-head" style="margin-top:0;"><h3>Add a product</h3></div>
+          <form id="productForm" class="form-grid">
+            <div class="field"><span class="field-icon">🛍️</span><div class="field-body"><label>Product name</label><input required name="name" placeholder="e.g. Tata Salt 1kg"></div></div>
+            <div class="field"><span class="field-icon">🏷️</span><div class="field-body"><label>Category</label><input required name="category" placeholder="e.g. Grocery"></div></div>
+            <div class="field"><span class="field-icon">💰</span><div class="field-body"><label>Selling price (₹)</label><input required type="number" step="0.01" name="price" placeholder="20"></div></div>
+            <div class="field"><span class="field-icon">🏷️</span><div class="field-body"><label>MRP (₹)</label><input type="number" step="0.01" name="mrp" placeholder="25"></div></div>
+            <div class="field"><span class="field-icon">📦</span><div class="field-body"><label>Stock quantity</label><input required type="number" name="stock" placeholder="50"></div></div>
+            <div style="grid-column:1/-1;"><div class="field-error" id="productError"></div>
+              <button class="btn btn-brand" type="submit" id="productBtn" style="margin-top:14px;">Add Product</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card">
+          <div class="section-head" style="margin-top:0;"><h3>Your products</h3></div>
+          <table><thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th></tr></thead>
+            <tbody id="productsTbody"><tr><td colspan="5" class="muted">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="panel-orders" class="panel hidden">
+        <div class="card">
+          <div class="section-head" style="margin-top:0;"><h3>Recent orders</h3></div>
+          <table><thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th></tr></thead>
+            <tbody id="ordersTbody"><tr><td colspan="4" class="muted">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+</section>
+
+<script src="assets/supabase-client.js"></script>
+<script>
+/* ---------------- tabs (login / signup / phone) ---------------- */
+document.querySelectorAll("[data-tab]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const tab = btn.dataset.tab;
+    document.querySelectorAll(".tabbar button").forEach(b => b.classList.toggle("active", b === btn && tab !== "phone"));
+    document.getElementById("loginForm").classList.toggle("hidden", tab !== "login");
+    document.getElementById("signupForm").classList.toggle("hidden", tab !== "signup");
+    document.getElementById("phoneBlock").classList.toggle("hidden", tab !== "phone");
+  });
+});
+
+/* ---------------- merchant sign up ---------------- */
+document.getElementById("signupForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const errEl = document.getElementById("signupError");
+  errEl.textContent = "";
+  const btn = document.getElementById("signupBtn");
+  btn.disabled = true; btn.textContent = "Creating account…";
+  try {
+    const { user } = await signUpEmail({
+      fullName: f.get("businessName"), email: f.get("email"),
+      phone: f.get("phone"), password: f.get("password"), role: "merchant",
+    });
+    if (user) {
+      await createMerchantProfile(user.id, {
+        businessName: f.get("businessName"), businessType: f.get("businessType"),
+        phone: f.get("phone"), email: f.get("email"), address: f.get("address"),
+      });
+    }
+    toast("Merchant account created — check your email to confirm, then log in.");
+    document.querySelector('[data-tab="login"]').click();
+  } catch (err) { errEl.textContent = err.message; }
+  finally { btn.disabled = false; btn.textContent = "Create Merchant Account »"; }
+});
+
+/* ---------------- merchant login ---------------- */
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const errEl = document.getElementById("loginError");
+  errEl.textContent = "";
+  const btn = document.getElementById("loginBtn");
+  btn.disabled = true; btn.textContent = "Logging in…";
+  try {
+    await signInEmail({ email: f.get("email"), password: f.get("password") });
+    enterDashboard();
+  } catch (err) { errEl.textContent = err.message; }
+  finally { btn.disabled = false; btn.textContent = "Login to Dashboard »"; }
+});
+
+/* ---------------- google ---------------- */
+document.getElementById("googleBtn").addEventListener("click", () => signInGoogle("/merchant.html").catch(err => toast(err.message)));
+
+/* ---------------- phone otp ---------------- */
+document.getElementById("phoneForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const phone = document.getElementById("phoneNumber").value.trim();
+  const errEl = document.getElementById("phoneError");
+  errEl.textContent = "";
+  const btn = document.getElementById("sendOtpBtn");
+  btn.disabled = true; btn.textContent = "Sending…";
+  try { await sendPhoneOtp(phone); document.getElementById("otpForm").classList.remove("hidden"); toast("Code sent to " + phone); }
+  catch (err) { errEl.textContent = err.message; }
+  finally { btn.disabled = false; btn.textContent = "Send OTP »"; }
+});
+document.getElementById("otpForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const phone = document.getElementById("phoneNumber").value.trim();
+  const code = document.getElementById("otpCode").value.trim();
+  const errEl = document.getElementById("otpError");
+  errEl.textContent = "";
+  const btn = document.getElementById("verifyOtpBtn");
+  btn.disabled = true; btn.textContent = "Verifying…";
+  try { await verifyPhoneOtp(phone, code); enterDashboard(); }
+  catch (err) { errEl.textContent = err.message; }
+  finally { btn.disabled = false; btn.textContent = "Verify & Continue »"; }
+});
+
+/* ---------------- dashboard nav ---------------- */
+document.querySelectorAll(".sidebar nav a[data-panel]").forEach(a => {
+  a.addEventListener("click", (e) => {
+    e.preventDefault();
+    document.querySelectorAll(".sidebar nav a[data-panel]").forEach(x => x.classList.toggle("active", x === a));
+    document.querySelectorAll(".panel").forEach(p => p.classList.add("hidden"));
+    document.getElementById("panel-" + a.dataset.panel)?.classList.remove("hidden");
+    if (a.dataset.panel === "overview") document.getElementById("panel-products").classList.remove("hidden");
+  });
+});
+document.getElementById("signOutBtn").addEventListener("click", async (e) => {
+  e.preventDefault(); await signOut(); location.reload();
+});
+
+/* ---------------- dashboard data ---------------- */
+let currentMerchant = null;
+
+async function enterDashboard() {
+  const session = await getSession();
+  if (!session) return;
+  document.getElementById("view-auth").classList.add("hidden");
+  document.getElementById("view-dash").classList.remove("hidden");
+  currentMerchant = session.user;
+  document.getElementById("dashBizName").textContent = session.user.user_metadata?.full_name || "Your store";
+  loadProducts();
+  loadOrders();
+}
+
+async function loadProducts() {
+  try {
+    const products = await fetchMyProducts(currentMerchant.id);
+    document.getElementById("statProducts").textContent = products.length;
+    document.getElementById("productsTbody").innerHTML = products.length
+      ? products.map(p => `<tr>
+          <td>${p.product_name}</td><td>${p.category || "—"}</td><td>₹${p.price}</td><td>${p.stock ?? "—"}</td>
+          <td><span class="badge ${p.is_available ? "on" : "off"}">${p.is_available ? "Active" : "Paused"}</span></td>
+        </tr>`).join("")
+      : `<tr><td colspan="5" class="muted">No products yet — add your first one above.</td></tr>`;
+  } catch (err) { document.getElementById("productsTbody").innerHTML = `<tr><td colspan="5" class="muted">${err.message}</td></tr>`; }
+}
+
+async function loadOrders() {
+  try {
+    const orders = await fetchMerchantOrders(currentMerchant.id);
+    document.getElementById("statOrders").textContent = orders.length;
+    document.getElementById("ordersTbody").innerHTML = orders.length
+      ? orders.map(o => `<tr><td>#${String(o.id).slice(0,8)}</td><td>${o.customer_name || "—"}</td><td>₹${o.total || "—"}</td><td><span class="badge on">${o.status || "placed"}</span></td></tr>`).join("")
+      : `<tr><td colspan="4" class="muted">No orders yet.</td></tr>`;
+  } catch (err) { document.getElementById("ordersTbody").innerHTML = `<tr><td colspan="4" class="muted">${err.message}</td></tr>`; }
+}
+
+document.getElementById("productForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const errEl = document.getElementById("productError");
+  errEl.textContent = "";
+  const btn = document.getElementById("productBtn");
+  btn.disabled = true; btn.textContent = "Adding…";
+  try {
+    await createProduct(currentMerchant.id, {
+      name: f.get("name"), category: f.get("category"),
+      price: f.get("price"), mrp: f.get("mrp"), stock: f.get("stock"),
+    });
+    e.target.reset();
+    toast("Product added");
+    loadProducts();
+  } catch (err) { errEl.textContent = err.message; }
+  finally { btn.disabled = false; btn.textContent = "Add Product"; }
+});
+
+/* ---------------- boot ---------------- */
+(async function boot() {
+  const session = await getSession();
+  if (session) enterDashboard();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Quicks — Everything in minutes</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- VIEW: SIGN UP -->
+<!-- ============================================================ -->
+<section id="view-signup" class="page">
+  <div class="wrap">
+    <div class="toplink" style="text-align:right; margin-bottom:6px;">Already have an account? <a href="#" data-nav="login">Login</a></div>
+    <div class="brand"><div class="brand-icon">⚡</div><div><div class="brand-name"><span class="deals">Deals</span><span class="hub">Hub</span></div><span class="brand-tag">QUICKS »</span></div></div>
+
+    <h1 class="title-lg">Create your account</h1>
+    <p class="subtitle">Sign up to explore nearby stores and get everything in minutes.</p>
+
+    <form id="signupForm">
+      <div class="field">
+        <span class="field-icon">👤</span>
+        <div class="field-body"><label>Full Name</label><input required name="fullName" placeholder="Enter your full name"></div>
+      </div>
+      <div class="field">
+        <span class="field-icon">✉️</span>
+        <div class="field-body"><label>Email Address</label><input required type="email" name="email" placeholder="Enter your email address"></div>
+      </div>
+      <div class="field">
+        <span class="field-icon">📞</span>
+        <div class="field-body"><label>Mobile Number</label><input required type="tel" name="phone" placeholder="Enter your mobile number"></div>
+      </div>
+      <div class="field">
+        <span class="field-icon">🔒</span>
+        <div class="field-body"><label>Password</label><input required type="password" minlength="6" name="password" placeholder="Create a strong password"></div>
+      </div>
+      <div class="field">
+        <span class="field-icon">🔒</span>
+        <div class="field-body"><label>Confirm Password</label><input required type="password" minlength="6" name="password2" placeholder="Confirm your password"></div>
+      </div>
+      <div class="field-error" id="signupError"></div>
+
+      <label class="checkline"><input type="checkbox" required id="agreeTerms"> I agree to the <a href="#">Terms &amp; Conditions</a> and <a href="#">Privacy Policy</a></label>
+
+      <button class="btn btn-brand" type="submit" id="signupBtn">Create Account »</button>
+    </form>
+
+    <div class="divider">or sign up with</div>
+    <div class="btn-row">
+      <button class="btn btn-outline" data-google="signup">🔵 Continue with Google</button>
+      <button class="btn btn-outline" data-nav="phone">📱 Continue with Phone</button>
+    </div>
+
+    <div class="notice"><span>🛡️</span><div><strong>Your data is safe with us</strong>We never share your information with anyone.</div></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- VIEW: LOGIN -->
+<!-- ============================================================ -->
+<section id="view-login" class="page hidden">
+  <div class="wrap">
+    <div class="brand"><div class="brand-icon">⚡</div><div><div class="brand-name"><span class="deals">Deals</span><span class="hub">Hub</span></div><span class="brand-tag">QUICKS »</span></div></div>
+    <h1 class="title-lg">Welcome back!</h1>
+    <p class="subtitle">Login to your account and continue shopping with us.</p>
+
+    <form id="loginForm">
+      <div class="field">
+        <span class="field-icon">✉️</span>
+        <div class="field-body"><label>Email Address</label><input required type="email" name="email" placeholder="Enter your email"></div>
+      </div>
+      <div class="field">
+        <span class="field-icon">🔒</span>
+        <div class="field-body"><label>Password</label><input required type="password" name="password" placeholder="Enter your password"></div>
+      </div>
+      <div class="field-error" id="loginError"></div>
+      <div style="text-align:right; margin-top:8px;"><a href="#" style="font-size:13px; font-weight:700; color:var(--pink);">Forgot Password?</a></div>
+
+      <button class="btn btn-brand" type="submit" id="loginBtn">Login »</button>
+    </form>
+
+    <div class="divider">or login with</div>
+    <div class="btn-row">
+      <button class="btn btn-outline" data-google="login">🔵 Continue with Google</button>
+      <button class="btn btn-outline" data-nav="phone">📱 Continue with Phone</button>
+    </div>
+    <div class="toplink" style="margin-top:18px;">New here? <a href="#" data-nav="signup">Create an account</a></div>
+    <div class="notice"><span>🛡️</span><div><strong>Your data is safe with us</strong>We never share your information with anyone.</div></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- VIEW: PHONE AUTH -->
+<!-- ============================================================ -->
+<section id="view-phone" class="page hidden">
+  <div class="wrap">
+    <div class="brand"><div class="brand-icon">⚡</div><div><div class="brand-name"><span class="deals">Deals</span><span class="hub">Hub</span></div><span class="brand-tag">QUICKS »</span></div></div>
+    <h1 class="title-lg">Continue with phone</h1>
+    <p class="subtitle">We'll text you a one-time code to verify your number.</p>
+
+    <form id="phoneForm">
+      <div class="field">
+        <span class="field-icon">📞</span>
+        <div class="field-body"><label>Mobile Number</label><input required type="tel" id="phoneNumber" placeholder="+91 98765 43210"></div>
+      </div>
+      <div class="field-error" id="phoneError"></div>
+      <button class="btn btn-brand" type="submit" id="sendOtpBtn">Send OTP »</button>
+    </form>
+
+    <form id="otpForm" class="hidden" style="margin-top:6px;">
+      <div class="field">
+        <span class="field-icon">🔑</span>
+        <div class="field-body"><label>Enter OTP</label><input required inputmode="numeric" id="otpCode" placeholder="6-digit code"></div>
+      </div>
+      <div class="field-error" id="otpError"></div>
+      <button class="btn btn-brand" type="submit" id="verifyOtpBtn">Verify &amp; Continue »</button>
+    </form>
+
+    <div class="toplink" style="margin-top:18px;"><a href="#" data-nav="login">← Back to login</a></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- VIEW: LOCATION -->
+<!-- ============================================================ -->
+<section id="view-location" class="page hidden">
+  <div class="wrap">
+    <h1 class="title-lg" style="margin-top:6px;">Select Location</h1>
+    <p class="subtitle">We need your location to show nearby stores and fast delivery</p>
+
+    <div class="field" style="margin-top:20px;">
+      <span class="field-icon">🔍</span>
+      <div class="field-body"><input id="locSearch" placeholder="Search area, street or landmark"></div>
+    </div>
+
+    <div class="section-head" style="margin-bottom:0;"><h3 style="font-size:13px; text-transform:uppercase; letter-spacing:.03em; color:var(--ink-soft);">Use current location</h3></div>
+    <div class="loc-row" id="useCurrentLoc" style="cursor:pointer;">
+      <div class="loc-ic">📍</div>
+      <div><div class="lname">Use my current location</div><div class="laddr">Detect my current location</div></div>
+    </div>
+
+    <div class="section-head" style="margin-bottom:0;"><h3 style="font-size:13px; text-transform:uppercase; letter-spacing:.03em; color:var(--ink-soft);">Popular areas</h3></div>
+    <div class="chip-row" id="popularAreas"></div>
+
+    <button class="btn btn-brand" id="confirmLocBtn">Confirm Location »</button>
+    <p class="muted" style="font-size:12px; text-align:center; margin-top:10px;">🛡️ Permission needed for better delivery experience</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- VIEW: HOME -->
+<!-- ============================================================ -->
+<section id="view-home" class="page hidden">
+  <header class="appbar">
+    <div class="appbar-row">
+      <div class="deliver">
+        <span style="color:var(--pink); font-size:18px;">📍</span>
+        <div><div class="muted" style="font-size:11px;">Deliver to</div><div class="to" id="deliverTo">Select location</div></div>
+      </div>
+      <div class="icon-row">
+        <button class="icon-btn">🔔</button>
+        <button class="icon-btn" id="cartBtn">🛒<span class="dot" id="cartCount">0</span></button>
+        <button class="icon-btn" data-nav="signup" id="logoutBtn" title="Sign out">⎋</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="search"><span>🔍</span><input placeholder="Search for products, stores…"></div>
+
+  <div class="hero-banner">
+    <div>
+      <h2>BIG SAVINGS<br>FAST DELIVERY ⚡</h2>
+      <p>15–30 MINS</p>
+      <span class="shop-now">Shop Now »</span>
+    </div>
+  </div>
+
+  <div class="cat-row">
+    <div class="cat"><div class="cat-ic">🛒</div><span>Grocery</span></div>
+    <div class="cat"><div class="cat-ic">💊</div><span>Pharmacy</span></div>
+    <div class="cat"><div class="cat-ic">📱</div><span>Electronics</span></div>
+    <div class="cat"><div class="cat-ic">👗</div><span>Fashion</span></div>
+    <div class="cat"><div class="cat-ic">⋯</div><span>More</span></div>
+  </div>
+
+  <div class="wrap-wide">
+    <div class="section-head"><h3>Flash Deals</h3><a class="see-all" href="#">See All</a></div>
+    <div class="hscroll" id="flashDeals"><div class="center-note" style="width:100%;">Loading…</div></div>
+
+    <div class="section-head"><h3>Best Sellers</h3><a class="see-all" href="#">See All</a></div>
+    <div class="hscroll" id="bestSellers"></div>
+
+    <div class="section-head"><h3>Nearby Stores</h3><a class="see-all" href="#">See All</a></div>
+    <div class="hscroll" id="nearbyStores"></div>
+  </div>
+
+  <nav class="bottomnav">
+    <button class="active">🏠<span>Home</span></button>
+    <button>▦<span>Categories</span></button>
+    <button class="fab">⚡</button>
+    <button>📋<span>Orders</span></button>
+    <button>👤<span>Account</span></button>
+  </nav>
+</section>
+
+<script src="assets/supabase-client.js"></script>
+<script>
+/* ---------------- view router ---------------- */
+const VIEWS = ["signup","login","phone","location","home"];
+function showView(name){
+  VIEWS.forEach(v => document.getElementById("view-"+v).classList.toggle("hidden", v !== name));
+  window.scrollTo(0,0);
+}
+document.addEventListener("click", (e) => {
+  const t = e.target.closest("[data-nav]");
+  if (t) { e.preventDefault(); showView(t.dataset.nav); }
+});
+
+/* ---------------- popular areas (static sample — replace with real geo data) ---------------- */
+["Killa Pardi","Pardi","Vapi","Valsad","Dharampur","Umbergaon"].forEach(name => {
+  const c = document.createElement("span");
+  c.className = "chip"; c.textContent = "📍 " + name;
+  c.style.cursor = "pointer";
+  c.onclick = () => { document.getElementById("deliverTo").textContent = name; };
+  document.getElementById("popularAreas").appendChild(c);
+});
+
+/* ---------------- sign up ---------------- */
+document.getElementById("signupForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const errEl = document.getElementById("signupError");
+  errEl.textContent = "";
+  if (f.get("password") !== f.get("password2")) { errEl.textContent = "Passwords do not match."; return; }
+  const btn = document.getElementById("signupBtn");
+  btn.disabled = true; btn.textContent = "Creating account…";
+  try {
+    await signUpEmail({
+      fullName: f.get("fullName"), email: f.get("email"),
+      phone: f.get("phone"), password: f.get("password"), role: "customer",
+    });
+    toast("Account created — check your email to confirm, then log in.");
+    showView("login");
+  } catch (err) { errEl.textContent = err.message; }
+  finally { btn.disabled = false; btn.textContent = "Create Account »"; }
+});
+
+/* ---------------- login ---------------- */
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const errEl = document.getElementById("loginError");
+  errEl.textContent = "";
+  const btn = document.getElementById("loginBtn");
+  btn.disabled = true; btn.textContent = "Logging in…";
+  try {
+    await signInEmail({ email: f.get("email"), password: f.get("password") });
+    afterAuth();
+  } catch (err) { errEl.textContent = err.message; }
+  finally { btn.disabled = false; btn.textContent = "Login »"; }
+});
+
+/* ---------------- google ---------------- */
+document.querySelectorAll("[data-google]").forEach(btn => {
+  btn.addEventListener("click", () => signInGoogle("/customer.html").catch(err => toast(err.message)));
+});
+
+/* ---------------- phone otp ---------------- */
+document.getElementById("phoneForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const phone = document.getElementById("phoneNumber").value.trim();
+  const errEl = document.getElementById("phoneError");
+  errEl.textContent = "";
+  const btn = document.getElementById("sendOtpBtn");
+  btn.disabled = true; btn.textContent = "Sending…";
+  try {
+    await sendPhoneOtp(phone);
+    document.getElementById("otpForm").classList.remove("hidden");
+    toast("Code sent to " + phone);
+  } catch (err) { errEl.textContent = err.message; }
+  finally { btn.disabled = false; btn.textContent = "Send OTP »"; }
+});
+document.getElementById("otpForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const phone = document.getElementById("phoneNumber").value.trim();
+  const code = document.getElementById("otpCode").value.trim();
+  const errEl = document.getElementById("otpError");
+  errEl.textContent = "";
+  const btn = document.getElementById("verifyOtpBtn");
+  btn.disabled = true; btn.textContent = "Verifying…";
+  try {
+    await verifyPhoneOtp(phone, code);
+    afterAuth();
+  } catch (err) { errEl.textContent = err.message; }
+  finally { btn.disabled = false; btn.textContent = "Verify & Continue »"; }
+});
+
+/* ---------------- after successful auth ---------------- */
+async function afterAuth() {
+  const savedLoc = localStorage.getItem("quicks_location");
+  if (savedLoc) { document.getElementById("deliverTo").textContent = savedLoc; showView("home"); loadHomeData(); }
+  else showView("location");
+}
+
+document.getElementById("useCurrentLoc").addEventListener("click", () => {
+  if (!navigator.geolocation) { toast("Geolocation not supported by this browser."); return; }
+  toast("Detecting your location…");
+  navigator.geolocation.getCurrentPosition(
+    (pos) => finishLocation(`Lat ${pos.coords.latitude.toFixed(3)}, Lng ${pos.coords.longitude.toFixed(3)}`),
+    () => toast("Couldn't get your location — pick an area below instead.")
+  );
+});
+document.getElementById("confirmLocBtn").addEventListener("click", () => {
+  const search = document.getElementById("locSearch").value.trim();
+  const chosen = document.getElementById("deliverTo").textContent;
+  finishLocation(search || (chosen !== "Select location" ? chosen : "My Location"));
+});
+function finishLocation(label) {
+  localStorage.setItem("quicks_location", label);
+  document.getElementById("deliverTo").textContent = label;
+  showView("home");
+  loadHomeData();
+}
+
+/* ---------------- home data ---------------- */
+function moneyCard(p) {
+  return `<div class="pcard">
+    <div class="thumb">${p.emoji || "🛍️"}${p.off ? `<span class="off">${p.off}</span>` : ""}</div>
+    <div class="body">
+      <div class="name">${p.product_name || p.name}</div>
+      <div class="price"><b>₹${p.price}</b>${p.mrp ? `<s>₹${p.mrp}</s>` : ""}</div>
+    </div>
+    <button class="addbtn" onclick="handleAdd('${p.id || ""}')">+</button>
+  </div>`;
+}
+function storeCard(m) {
+  return `<div class="store-card">
+    <div class="img">🏪</div>
+    <div class="body"><div class="name">${m.business_name || m.name}</div><div class="meta">15–25 mins • nearby</div></div>
+  </div>`;
+}
+async function handleAdd(productId) {
+  const session = await getSession();
+  if (!session) { toast("Log in to add items to your cart."); return; }
+  try {
+    await addToCart(session.user.id, productId, 1);
+    const el = document.getElementById("cartCount");
+    el.textContent = (parseInt(el.textContent || "0") + 1);
+    toast("Added to cart");
+  } catch (err) { toast(err.message); }
+}
+async function loadHomeData() {
+  try {
+    const products = await fetchProducts({ limit: 20 });
+    const flashHtml = products.slice(0, 8).map(moneyCard).join("") || `<p class="muted">No products yet — add some from the merchant dashboard.</p>`;
+    document.getElementById("flashDeals").innerHTML = flashHtml;
+    document.getElementById("bestSellers").innerHTML = products.slice(8, 16).map(moneyCard).join("") || flashHtml;
+  } catch (err) { document.getElementById("flashDeals").innerHTML = `<p class="muted">Couldn't load products: ${err.message}</p>`; }
+  try {
+    const merchants = await fetchNearbyMerchants(10);
+    document.getElementById("nearbyStores").innerHTML = merchants.map(storeCard).join("") || `<p class="muted">No stores nearby yet.</p>`;
+  } catch (err) { document.getElementById("nearbyStores").innerHTML = `<p class="muted">Couldn't load stores: ${err.message}</p>`; }
+}
+
+/* ---------------- boot ---------------- */
+(async function boot() {
+  const session = await getSession();
+  if (session) afterAuth(); else showView("signup");
+})();
+</script>
+</body>
+</html>
